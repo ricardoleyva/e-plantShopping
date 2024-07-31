@@ -39,6 +39,13 @@ body {
    
 }
 
+.navbarCounter{
+    position: absolute;
+    text-align: center;
+    margin-top: 22px;
+    margin-left: 26px;
+}
+
 /* Product Grid */
 .product-grid {
     display:flex;
@@ -79,6 +86,12 @@ body {
     transform: scale(1.05);
     transition: transform 0.3s ease-in-out;
     z-index: 1;
+}
+
+.product-cat{
+    text-align: center;
+    color: #24701d
+    ;
 }
 
 .product-title {
