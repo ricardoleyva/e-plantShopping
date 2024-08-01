@@ -296,7 +296,6 @@ function ProductList() {
   const handleAddToCart = (plant, category, plantType) => {
     dispatch(addItem(plant));
     setDisabledPlants([...disabledPlants, plant.name]);
-    console.log(category + ': ' + plantType + ' ' + plant.name);
     setAddedToCart((prevState) => ({
       ...prevState,
       [plant.name]: true, // Set the plant name as key and value as true to indicate it's added to cart
@@ -381,7 +380,9 @@ function ProductList() {
                     />
                     <div className="product-title">{plant.name}</div>
                     <button
-                      className={`product-button ${disabledPlants.includes(plant.name) && 'disabled'}`}
+                      className={`product-button ${
+                        disabledPlants.includes(plant.name) && "disabled"
+                      }`}
                       onClick={() => handleAddToCart(plant, index, plantIndex)}
                       disabled={disabledPlants.includes(plant.name)}
                     >
