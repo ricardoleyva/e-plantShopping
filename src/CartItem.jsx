@@ -1,8 +1,10 @@
 import { useSelector, useDispatch } from "react-redux";
-import { addItem, removeItem, increaseItem, substractItem } from "./CartSlice";
+import { removeItem, increaseItem, substractItem } from "./CartSlice";
+import { enablePlant } from "./PlantSlice";
 import "./CartItem.css";
 const CartItem = ({ onContinueShopping }) => {
   const cart = useSelector((state) => state.cart.items);
+  const plants = useSelector((state) => state.plant.items);
   const dispatch = useDispatch();
 
   // Calculate total amount for all products in the cart
@@ -26,15 +28,18 @@ const CartItem = ({ onContinueShopping }) => {
   };
 
   const handleDecrement = (item) => {
-    if (item.quantity > 0) {
+    if (item.quantity > 1) {
       dispatch(substractItem(item));
     } else {
       dispatch(removeItem(item));
+      dispatch(enablePlant(item.name));
     }
   };
 
   const handleRemove = (item) => {
     dispatch(removeItem(item));
+    dispatch(enablePlant(item.name));
+    console.log("Reducer: " + item.name + " " + plants.includes(item.name));
   };
 
   // Calculate total cost based on quantity for an item

@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./ProductList.css";
 import CartItem from "./CartItem";
 import { addItem } from "./CartSlice";
 import { useSelector, useDispatch } from "react-redux";
+import { disablePlant } from "./PlantSlice";
 function ProductList() {
   const [showCart, setShowCart] = useState(false);
   const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
-  const [addedToCart, setAddedToCart] = useState({});
   const [disabledPlants, setDisabledPlants] = useState([]);
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.items);
+  const plants = useSelector((state) => state.plant.items);
 
   const plantsArray = [
     {
@@ -293,13 +294,11 @@ function ProductList() {
     setShowCart(false);
   };
 
-  const handleAddToCart = (plant, category, plantType) => {
-    dispatch(addItem(plant));
+  const handleAddToCart = (plant) => {
     setDisabledPlants([...disabledPlants, plant.name]);
-    setAddedToCart((prevState) => ({
-      ...prevState,
-      [plant.name]: true, // Set the plant name as key and value as true to indicate it's added to cart
-    }));
+    dispatch(addItem(plant));
+    dispatch(disablePlant(plant.name));
+    console.log("Dispatch: " + plant.name + " " + plants.includes(plant.name));
   };
 
   const totalItems = () => {
@@ -309,7 +308,6 @@ function ProductList() {
     });
     return totalPlants;
   };
-
   return (
     <div>
       <div className="navbar" style={styleObj}>
@@ -381,9 +379,9 @@ function ProductList() {
                     <div className="product-title">{plant.name}</div>
                     <button
                       className={`product-button ${
-                        disabledPlants.includes(plant.name) && "disabled"
+                        disabledPlants.includes(plant.name) ? 'disabled' : ''
                       }`}
-                      onClick={() => handleAddToCart(plant, index, plantIndex)}
+                      onClick={() => handleAddToCart(plant)}
                       disabled={disabledPlants.includes(plant.name)}
                     >
                       Add to Cart
