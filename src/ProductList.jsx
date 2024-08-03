@@ -377,6 +377,8 @@ function ProductList() {
                       alt={plant.name}
                     />
                     <div className="product-title">{plant.name}</div>
+                    <div className="product-desc">{plant.description}</div><br />
+                    <div className="product-price">{plant.cost}</div>
                     <button
                       className={`product-button ${
                         plantsEnDis.includes(plant.name) ? 'disabled' : ''
