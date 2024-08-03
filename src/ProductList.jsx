@@ -6,11 +6,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { disablePlant } from "./PlantSlice";
 function ProductList() {
   const [showCart, setShowCart] = useState(false);
-  const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
-  const [disabledPlants, setDisabledPlants] = useState([]);
+  const [showPlants, setShowPlants] = useState(false);
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.items);
-  const plants = useSelector((state) => state.plant.items);
+  const plantsEnDis = useSelector((state) => state.plant.items);
 
   const plantsArray = [
     {
@@ -285,20 +284,21 @@ function ProductList() {
 
   const handlePlantsClick = (e) => {
     e.preventDefault();
-    setShowPlants(true); // Set showAboutUs to true when "About Us" link is clicked
+    setShowPlants(true); // Set showPlants to true when "About Us" link is clicked
     setShowCart(false); // Hide the cart when navigating to About Us
   };
 
   const handleContinueShopping = (e) => {
     e.preventDefault();
+    setShowPlants(true);
     setShowCart(false);
+    //console.log("Estado de plants tras carrito: " + plantsEnDis);
   };
 
   const handleAddToCart = (plant) => {
-    setDisabledPlants([...disabledPlants, plant.name]);
     dispatch(addItem(plant));
     dispatch(disablePlant(plant.name));
-    console.log("Dispatch: " + plant.name + " " + plants.includes(plant.name));
+    //console.log('handleAddToCart: ' + plant.name);
   };
 
   const totalItems = () => {
@@ -334,7 +334,7 @@ function ProductList() {
           </div>
           <div>
             {" "}
-            <div className="navbarCounter">{totalItems()}</div>
+            <div className="navbarCounter" onClick={(e) => handleCartClick(e)}>{totalItems()}</div>
             <a href="#" onClick={(e) => handleCartClick(e)} style={styleA}>
               <h1 className="cart">
                 <svg
@@ -379,10 +379,10 @@ function ProductList() {
                     <div className="product-title">{plant.name}</div>
                     <button
                       className={`product-button ${
-                        disabledPlants.includes(plant.name) ? 'disabled' : ''
+                        plantsEnDis.includes(plant.name) ? 'disabled' : ''
                       }`}
                       onClick={() => handleAddToCart(plant)}
-                      disabled={disabledPlants.includes(plant.name)}
+                      disabled={plantsEnDis.includes(plant.name)}
                     >
                       Add to Cart
                     </button>

@@ -47,6 +47,10 @@ body {
   margin-left: 26px;
 }
 
+.navbarCounter:hover{
+  cursor: pointer; 
+}
+
 /* Product Grid */
 .product-grid {
   display: flex;

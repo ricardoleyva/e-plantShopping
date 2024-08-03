@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import CartSlice from "./CartSlice";
 
-const PlantSlice = createSlice({
+export const PlantSlice = createSlice({
   name: "plant",
   initialState: {
     items: [],
@@ -15,7 +14,12 @@ const PlantSlice = createSlice({
       }
     },
     enablePlant: (state, action) => {
-      state.items = state.items.filter((item) => item.name !== action.payload);
+      const name = action.payload;
+      for (let i = 0; i < state.items.length; i++) {
+        if (state.items[i] === name) {
+          state.items.splice(i, 1);
+        }
+      }
     },
   },
 });

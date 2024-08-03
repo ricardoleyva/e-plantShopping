@@ -4,15 +4,18 @@ import { enablePlant } from "./PlantSlice";
 import "./CartItem.css";
 const CartItem = ({ onContinueShopping }) => {
   const cart = useSelector((state) => state.cart.items);
-  const plants = useSelector((state) => state.plant.items);
+  const plantsEnDis = useSelector((state) => state.plant.items);
   const dispatch = useDispatch();
 
   // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
     let totalCost = 0;
     cart.forEach((element) => {
-      totalCost += element.cost * element.quantity;
+      let costString = element.cost.slice(1);
+      let costInt = parseInt(costString);
+      totalCost += costInt * element.quantity;
     });
+    return totalCost;
   };
 
   const handleContinueShopping = (e) => {
@@ -27,25 +30,28 @@ const CartItem = ({ onContinueShopping }) => {
     dispatch(increaseItem(item));
   };
 
-  const handleDecrement = (item) => {
-    if (item.quantity > 1) {
+  const handleDecrement = (item, quantity) => {
+    if (quantity > 1) {
       dispatch(substractItem(item));
     } else {
       dispatch(removeItem(item));
-      dispatch(enablePlant(item.name));
+      dispatch(enablePlant(item));
+      //console.log('Estado de PlantSlice al llamar handleDecrement: ' + plantsEnDis);
     }
   };
 
   const handleRemove = (item) => {
     dispatch(removeItem(item));
-    dispatch(enablePlant(item.name));
-    console.log("Reducer: " + item.name + " " + plants.includes(item.name));
+    dispatch(enablePlant(item));
+    //console.log("Estado de PlantSlice al llamar handleRemove: " + plantsEnDis);
   };
 
   // Calculate total cost based on quantity for an item
-  const calculateTotalCost = (item) => {
-    let totalCost = 0;
-    return (totalCost = item.cost * item.quantity);
+  const calculateTotalItemCost = (cost, quantity) => {
+    let costString = cost.slice(1);
+    let costInt = parseInt(costString);
+    let totalCost = costInt * quantity;
+    return totalCost;
   };
 
   return (
@@ -63,7 +69,7 @@ const CartItem = ({ onContinueShopping }) => {
               <div className="cart-item-quantity">
                 <button
                   className="cart-item-button cart-item-button-dec"
-                  onClick={() => handleDecrement(item)}
+                  onClick={() => handleDecrement(item.name, item.quantity)}
                 >
                   -
                 </button>
@@ -72,17 +78,17 @@ const CartItem = ({ onContinueShopping }) => {
                 </span>
                 <button
                   className="cart-item-button cart-item-button-inc"
-                  onClick={() => handleIncrement(item)}
+                  onClick={() => handleIncrement(item.name)}
                 >
                   +
                 </button>
               </div>
               <div className="cart-item-total">
-                Total: ${calculateTotalCost(item)}
+                Total: ${calculateTotalItemCost(item.cost, item.quantity)}
               </div>
               <button
                 className="cart-item-delete"
-                onClick={() => handleRemove(item)}
+                onClick={() => handleRemove(item.name)}
               >
                 Delete
               </button>
